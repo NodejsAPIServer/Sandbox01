@@ -1,20 +1,28 @@
 'use strict';
 
-// const conf = require('./lib/config');
+const utils = require('./lib/utils');
+const conf = require('./lib/config');
+const loggerModule = require('./lib/logger');
+
+const dummy = require('./lib/dummy');
 
 const aok = require('./lib/aok');
 const app = new aok();
 
-app.addInitWorker(() => {
-    console.log("Test 1");
-});
+function *initApp() {
+    yield conf(process.cwd() + '/config.01.json');
 
-app.addInitWorker(() => {
-    console.log("Test 2");
-});
+    app.conf = conf;
 
-app.addInitWorker(() => {
-    console.log("Test 3");
-});
+    yield loggerModule(conf.get('loggerOptions'));
+
+    app.logger = loggerModule.createLogger('[default]');
+    app.logger.log("Started!");
+
+}
+
+utils.runGenerator(initApp);
+
+dummy.dummy1("Tester 123");
 
 module.exports = app;
