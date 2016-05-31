@@ -2,4 +2,4 @@
 
 const app = require('./app');
 
-console.log(app.conf.get("loggerOptions"));
+// console.log(app.conf.get("loggerOptions"));
